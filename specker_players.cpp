@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string.h>
+#include <string>
 #include "specker_moves_and_states.cpp"
 
 using namespace std;
@@ -9,13 +9,15 @@ class Player {
  Player(const string &n){
    name=n;
  }
- virtual ~Player();
+ virtual ~Player(){
+   name.clear();
+ }
  virtual const string & getType() const = 0;
  virtual Move play(const State &s) = 0;
 
  friend ostream & operator << (ostream &out, const Player &player);
  
- private:
+ protected:
  string name;
  };
 
@@ -28,16 +30,13 @@ class Player {
 
 //greedy player
  class GreedyPlayer: public Player {
+  private:
+  string type;
+  public:
 
-   private:
-   static const string type; 
-
-
-   public:
-
-   GreedyPlayer(const string &n):Player(n) {}
-
-   ~GreedyPlayer(){}
+   GreedyPlayer(const string &n):Player(n) {
+     type="Greedy";
+   }
 
    const string & getType() const {
      return type;
@@ -53,8 +52,6 @@ class Player {
      return move;
    }
  };
- const string GreedyPlayer::type="Greedy";
-
 
 
 
@@ -62,14 +59,14 @@ class Player {
 class SpartanPlayer :public Player {
  
   private:
-  static const string type;
+  string type;
  
  
   public:
  
-  SpartanPlayer(const string &n):Player(n){}
- 
-  ~SpartanPlayer(){}
+  SpartanPlayer(const string &n):Player(n){
+    type="Spartan";
+  }
  
   const string & getType() const {
     return type;
@@ -85,21 +82,20 @@ class SpartanPlayer :public Player {
      return move;
   }
 };
-const string SpartanPlayer::type="Spartan";
 
 
 //sneaky player
   class SneakyPlayer : public Player{
     
     private:
-    static const string type;
+    string type;
     
     
     public:
     
-    SneakyPlayer(const string &n):Player(n){}
-    
-    ~SneakyPlayer(){}
+    SneakyPlayer(const string &n):Player(n){
+      type="Sneaky";
+    }
     
     const string & getType() const {
     return type;
@@ -115,23 +111,23 @@ const string SpartanPlayer::type="Spartan";
      return move;
   }
   };
-  const string SneakyPlayer::type="Sneaky";
-
+  
 
 
 //righteous player
   class RighteousPlayer : public Player{
     private:
-    static const string type;
+    string type;
     int my_fortune;
     
     public:
     
     RighteousPlayer(const string &n): 
-    Player(n),my_fortune(0){}
+    Player(n){
+      type="Righteous";
+      my_fortune=0;
+    }
     
-    ~RighteousPlayer(){}
-
     const string & getType() const {
     return type;
     }
@@ -149,7 +145,6 @@ const string SpartanPlayer::type="Spartan";
      return move;
   }
   };
-  const string RighteousPlayer::type="Righteous";
   int main(){}
   
  
